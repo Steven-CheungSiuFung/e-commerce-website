@@ -7,6 +7,7 @@ import './index.css';
 import App from './App';
 import { UserProvider } from './contexts/user.context';
 import { ProductsProvider } from './contexts/shop-data.context';
+import { CartDropdownProvider } from './contexts/cart-dropdown.context';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -15,7 +16,9 @@ ReactDOM.render(
     <BrowserRouter>
       <UserProvider>
         <ProductsProvider>
-          <App />
+          <CartDropdownProvider>
+            <App />
+          </CartDropdownProvider>
         </ProductsProvider>
       </UserProvider>
     </BrowserRouter> 
