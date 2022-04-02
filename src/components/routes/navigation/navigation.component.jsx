@@ -16,7 +16,7 @@ import "./navigation.styles.scss";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
-  const { isCartOpen } = useContext(CartDropdownContext)
+  const { isCartOpen } = useContext(CartDropdownContext);
 
   return (
     <Fragment>
