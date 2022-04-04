@@ -3,8 +3,8 @@ import { Fragment, useContext, useEffect, useState } from "react";
 
 import { CategoriesContext } from "../../../contexts/shop-data.context";
 
-import "./category.styles.scss";
 import ProductCard from "../../product-card/product-card.component";
+import { ProductsCategoryContainer, ProductsCategoryTitle } from "./category.styles.jsx";
 
 const Category = () => {
     const { category } = useParams();
@@ -17,12 +17,12 @@ const Category = () => {
 
     return (
         <Fragment>
-            <h2 className="products-category-title">{category.toUpperCase()}</h2>
-            <div className="products-category-container">
+            <ProductsCategoryTitle>{category.toUpperCase()}</ProductsCategoryTitle>
+            <ProductsCategoryContainer>
                 {products && products.map(product =>
                     <ProductCard key={product.id} product={product} />
                 )}
-            </div>
+            </ProductsCategoryContainer>
         </Fragment>   
     )
 }
