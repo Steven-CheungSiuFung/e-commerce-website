@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { useState, useEffect } from "react";
+import { createContext, useReducer } from "react";
+import { createAction } from "../utils/reducer/reducer.utils";
 
 const addItemToCart = (addedItems, productToAdd) => {
     const isItemExists = addedItems.find(item => item.id === productToAdd.id);
@@ -10,11 +10,11 @@ const addItemToCart = (addedItems, productToAdd) => {
     }
 }
 
-const reduceItemQuantity = (addedItems, product) => {
+const decrementItemQuantity = (addedItems, product) => {
     return addedItems.map(item => (item.id === product.id && product.quantity > 1) ? {...item, quantity: item.quantity - 1} : item)
 }
 
-const increaseItemQuantity = (addedItems, product) => {
+const incrementItemQuantity = (addedItems, product) => {
     return addedItems.map(item => (item.id === product.id) ? {...item, quantity: item.quantity + 1} : item)
 }
 
@@ -22,47 +22,88 @@ const removeItem = (addedItems, product) => {
     return addedItems.filter(item => item.id !== product.id)
 }
 
+
 export const CartDropdownContext = createContext({
     isCartOpen: false,
     setIsCartOpen: () => {},
     addedItems: [],
-    addNewItem: () => {},
     itemsCount: 0,
-    updateQuantity: () => {},
+    updateCartReducer: () => {},
     totalPrice: 0,
 })
 
-export const CartDropdownProvider = ({children}) => {
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [addedItems, setAddedItems] = useState([]);
-    const [itemsCount, setItemsCount] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
+const INITIAL_STATE = {
+    isCartOpen: false,
+    addedItems: [],
+    itemsCount: 0,
+    totalPrice: 0,
+}
 
-    useEffect(() => {
-        const newCount = addedItems.reduce((total, item) => total + item.quantity, 0);
-        setItemsCount(newCount);
-    }, [addedItems]);
+const CART_ACTION_TYPE = {
+    TOGGLE_CART_DROPDOWN: "TOGGLE_CART_DROPDOWN",
+    SET_ADDED_ITEMS: "SET_ADDED_ITEMS",
+}
 
-    useEffect(() => {
-        const newtotal = addedItems.reduce((total, item) => total + (item.quantity * item.price), 0);
-        setTotalPrice(newtotal);
-    }, [addedItems]);
+const CartReducer = (state, action) => {
+    const { type, payload } = action;
 
-    const addNewItem = (productToAdd) => {
-        setAddedItems(addItemToCart(addedItems, productToAdd));
+    switch (type) {
+        case CART_ACTION_TYPE.TOGGLE_CART_DROPDOWN:
+            return {...state, isCartOpen: payload};
+        case CART_ACTION_TYPE.SET_ADDED_ITEMS:
+            return {...state, ...payload};
+        default:
+            throw new Error(`Unhanled type ${type} in useReducer`);
     }
+}
 
-    const updateQuantity = (product, type) => {
-        if (type === "decrement") {
-            setAddedItems(reduceItemQuantity(addedItems, product));
-        } else if (type === "increment") {
-            setAddedItems(increaseItemQuantity(addedItems, product));
-        } else if (type === "remove") {
-            setAddedItems(removeItem(addedItems, product));
+export const CartDropdownProvider = ({children}) => {
+    const [CartState, dispatch] = useReducer(CartReducer, INITIAL_STATE);
+    const { isCartOpen, addedItems, itemsCount, totalPrice } = CartState;
+
+    const setIsCartOpen = () => {
+        dispatch(
+            createAction(CART_ACTION_TYPE.TOGGLE_CART_DROPDOWN, !isCartOpen)
+        )
+    };
+
+    const setAddedItems = (newAddedItems) => {
+        const newCount = newAddedItems.reduce((total, item) => total + item.quantity, 0);
+        const newTotal = newAddedItems.reduce((total, item) => total + (item.quantity * item.price), 0);
+
+        dispatch(
+            createAction(
+                CART_ACTION_TYPE.SET_ADDED_ITEMS, 
+                {
+                addedItems: newAddedItems,
+                itemsCount: newCount,
+                totalPrice: newTotal,
+                }
+            ));
+    };
+
+    
+    const createNewAddedItems = (product, targetName) => {
+        switch (targetName) {
+            case "addItem":
+                return addItemToCart(addedItems, product);
+            case "decrement":
+                return decrementItemQuantity(addedItems, product);
+            case "increment":
+                return incrementItemQuantity(addedItems, product);
+            case "remove":
+                return removeItem(addedItems, product);
+            default:
+                throw new Error(`Unhandled type ${targetName} in createNewAddedItems`);
         }
     }
 
-    const value = {isCartOpen, setIsCartOpen, addedItems, addNewItem, itemsCount, updateQuantity, totalPrice};
+    const updateCartReducer = (product, targetName) => {
+        const newAddedItems = createNewAddedItems(product, targetName);
+        setAddedItems(newAddedItems);
+    }
+
+    const value = {isCartOpen, setIsCartOpen, addedItems, itemsCount, updateCartReducer, totalPrice};
 
     return (
         <CartDropdownContext.Provider value={value}>{children}</CartDropdownContext.Provider>

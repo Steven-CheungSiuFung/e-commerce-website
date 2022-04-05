@@ -6,11 +6,11 @@ import { Value, Arrow, Quantity, NameAndPrice, RemoveButton, ImageContainer, Che
 const CheckoutItemCard = ({item}) => {
     const { imageUrl, name, quantity, price } = item;
 
-    const { updateQuantity } = useContext(CartDropdownContext);
+    const { updateCartReducer } = useContext(CartDropdownContext);
 
     const onClickHandler = (event) => {
-        const tagName = event.target.getAttribute("name");
-        updateQuantity(item, tagName);
+        const targetName = event.target.getAttribute("name");
+        updateCartReducer(item, targetName);
     }
 
     return (

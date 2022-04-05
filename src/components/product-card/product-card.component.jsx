@@ -8,10 +8,11 @@ import { ProductCardContainer, Footer, Name, Price } from "./product-card.styles
 const ProductCard = ({product}) => {
     const { name, price, imageUrl } = product;
 
-    const { addNewItem } = useContext(CartDropdownContext);
+    const { updateCartReducer } = useContext(CartDropdownContext);
 
-    const addToCart = () => {
-        addNewItem(product)
+    const addToCart = (event) => {
+        const targetName = event.target.name;
+        updateCartReducer(product, targetName);
     }
     
     return (
@@ -21,7 +22,7 @@ const ProductCard = ({product}) => {
                 <Name>{name}</Name>
                 <Price>${price}</Price>
             </Footer>
-            <Button buttonType={BUTTON_TYPE_CLASSES.inverted} onClick={addToCart}>Add to cart</Button>
+            <Button buttonType={BUTTON_TYPE_CLASSES.inverted} name="addItem" onClick={addToCart}>Add to cart</Button>
         </ProductCardContainer>
     )
 }
