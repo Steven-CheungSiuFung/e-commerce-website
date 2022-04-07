@@ -1,16 +1,20 @@
-import { useContext } from "react";
-import { CartDropdownContext } from "../../contexts/cart-dropdown.context";
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateCartReducer } from "../../store/cart/cart.action";
+import { selectCartItems } from "../../store/cart/cart.selector";
+
 
 import { Value, Arrow, Quantity, NameAndPrice, RemoveButton, ImageContainer, CheckoutItemContainer } from "./checkout-item-card.styles";
 
 const CheckoutItemCard = ({item}) => {
-    const { imageUrl, name, quantity, price } = item;
+    const addedItems = useSelector(selectCartItems);
+    const dispatch = useDispatch();
 
-    const { updateCartReducer } = useContext(CartDropdownContext);
+    const { imageUrl, name, quantity, price } = item;
 
     const onClickHandler = (event) => {
         const targetName = event.target.getAttribute("name");
-        updateCartReducer(item, targetName);
+        dispatch(updateCartReducer(addedItems, item, targetName));
     }
 
     return (
