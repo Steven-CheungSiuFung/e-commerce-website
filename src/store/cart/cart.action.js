@@ -23,7 +23,6 @@ const removeItem = (addedItems, product) => {
 }
 
 const createNewAddedItems = (addedItems, product, targetName) => {
-    console.log(addedItems);
     switch (targetName) {
         case "addItem":
             return addItemToCart(addedItems, product);
