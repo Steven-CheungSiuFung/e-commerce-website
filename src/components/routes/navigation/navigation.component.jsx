@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../store/user/user.selector";
 import { selectIsCartOpen } from "../../../store/cart/cart.selector";
 
-import { signOutUser } from "../../../utils/firebase/firebase.utils";
-
 import CartIcon from "../../cart-icon/cart-icon.component";
 import { useDispatch } from "react-redux";
 import { signOutStart } from "../../../store/user/user.action";
