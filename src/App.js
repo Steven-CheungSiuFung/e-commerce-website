@@ -11,13 +11,12 @@ import Authentication from "./components/routes/authentication/authentication.co
 import Shop from "./components/routes/shop/shop.component";
 import Checkout from "./components/routes/checkout/checkout.component";
 
-
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(checkUserSession());
-  }, [])
+  }, []);
 
   return (
     <Routes>
@@ -28,7 +27,7 @@ const App = () => {
         <Route path="checkout" element={<Checkout />} />
       </Route>
     </Routes>
-  )
-}
+  );
+};
 
 export default App;

@@ -4,7 +4,7 @@ export const Value = styled.span`
   margin: 0 10px;
 `;
 
-export const Arrow = styled.span`
+export const Arrow = styled.span<{ name: string }>`
   cursor: pointer;
 `;
 
@@ -19,7 +19,7 @@ export const NameAndPrice = styled.span`
   padding-right: 15px;
 `;
 
-export const RemoveButton = styled.span`
+export const RemoveButton = styled.span<{ name: string }>`
   cursor: pointer;
   padding-right: 10px;
   margin-left: 8px;
@@ -27,7 +27,7 @@ export const RemoveButton = styled.span`
 
 export const ImageContainer = styled.div`
   width: 23%;
-  
+
   img {
     width: 100%;
     height: 100%;

@@ -1,9 +1,7 @@
 import Directory from "../../categories-container/categories-container.component";
 
 const Home = () => {
-  return (
-      <Directory />
-  );
-}
+  return <Directory />;
+};
 
 export default Home;

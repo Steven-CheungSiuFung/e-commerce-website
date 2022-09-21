@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 export const CheckoutContainer = styled.div`
   width: 55%;
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px auto 0;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px auto 0;
 `;
 
 export const CheckoutHeadr = styled.div`
@@ -20,8 +20,8 @@ export const CheckoutHeadr = styled.div`
 export const HeaderBlock = styled.div`
   text-transform: capitalize;
   width: 23%;
-  
-    &:last-child {
+
+  &:last-child {
     width: 8%;
   }
 `;
